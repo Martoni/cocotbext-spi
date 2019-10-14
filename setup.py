@@ -11,7 +11,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="cocotb-spi",
+    name="cocomod-spi",
     use_scm_version={
         "relative_to": __file__,
         "write_to": "cocomod/spi/version.py",

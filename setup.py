@@ -5,15 +5,16 @@
 # Created:  14/10/2019
 #-----------------------------------------------------------------------------
 import setuptools
+from setuptools import setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-setuptools.setup(
-    name="cocotb.ext.spi",
+setup(
+    name="cocotb-ext-spi",
     use_scm_version={
         "relative_to": __file__,
-        "write_to": "cocotb/ext/version.py",
+        "write_to": "cocotb/ext/spi/version.py",
     },
     author="Fabien Marteau",
     author_email="mail@fabienm.eu",
@@ -32,3 +33,5 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
     ],
 )
+
+

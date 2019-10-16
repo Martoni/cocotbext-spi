@@ -32,10 +32,10 @@ class SPIConfig(object):
     def __setattr__(self, key, value):
         if key == "cpol":
             if value != False:
-                raise TypeError("cpol = True not implemented yet")
+                raise TypeError("cpol = True fully implemented yet")
         elif key == "cpha":
             if value != True:
-                raise TypeError("cpha = False not implemented yet")
+                raise TypeError("cpha = False fully implemented yet")
         self.__dict__[key] = value
 
 class SPIModule(Driver, Monitor):
@@ -53,6 +53,37 @@ class SPIModule(Driver, Monitor):
         self.cs = signals.cs
         self.sclk = signals.sclk
 
+        # chip select Edging
+        if self.config.csphase:
+            self.csBeginEdge = RisingEdge(self.cs)
+            self.csEndEdge = FallingEdge(self.cs)
+        else:
+            self.csBeginEdge = FallingEdge(self.cs)
+            self.csEndEdge = RisingEdge(self.cs)
+
+        # sclk edging
+        # CPOL  | leading edge | trailing edge
+        # ------|--------------|--------------
+        # false | rising       | falling
+        # true  | falling      | rising
+        if self.config.cpol:
+            self.sclkLeadEdge = FallingEdge(self.sclk)
+            self.sclkTrailEdge = RisingEdge(self.sclk)
+        else:
+            self.sclkLeadEdge = RisingEdge(self.sclk)
+            self.sclkTrailEdge = FallingEdge(self.sclk)
+
+        # CPHA  | data change    | data read
+        # ------|----------------|--------------
+        # false | trailling edge | leading edge
+        # true  | leading edge   | trailing edge
+        if self.config.cpha:
+            self.dataChangEdge = self.sclkLeadEdge
+            self.dataReadEdge = self.sclkTrailEdge
+        else:
+            self.dataChangEdge = self.sclkTrailEdge
+            self.dataReadEdge = self.sclkLeadEdge
+
         Driver.__init__(self)
         Monitor.__init__(self)
 
@@ -63,9 +94,9 @@ class SPIModule(Driver, Monitor):
 
     def set_cs(self, enable):
         if enable:
-            self.cs <= not self.config.csphase
+            self.cs <= int(self.config.csphase)
         else:
-            self.cs <= self.config.csphase
+            self.cs <= int(not self.config.csphase)
 
     @coroutine
     def read(self, address, sync=True):
@@ -79,14 +110,32 @@ class SPIModule(Driver, Monitor):
 
     @coroutine
     def _driver_send(self, transaction, sync=True, **kwargs):
-        #raise Exception("TODO: implement _driver_send for spi driver")
-        yield Timer(1)
+        short_per = Timer(100, units="ns")
+        sclk_per = Timer(self.config.baudrate[0],
+                         units=self.config.baudrate[1])
+        #initial state
+        self.sclk <= 0
+        yield sclk_per
+
+        for i in range(8):
+            self.sclk <= 1
+            self.mosi <= (transaction >> (7-i)) & 0x01
+            yield sclk_per
+            self.sclk <= 0
+            yield sclk_per
 
     @coroutine
     def _monitor_recv(self):
-        miso_list = []
-        mosi_list = []
         self.log.warning("TODO: implement spi monitor function _monitor_recv")
+
         while True:
-            yield Timer(10, units="us") # XXX
-            self._recv((miso_list, mosi_list))
+            miso = ""
+            mosi = ""
+            yield self.csBeginEdge
+            while int(self.cs) == int(self.config.csphase):
+                yield [self.dataReadEdge, self.csEndEdge]
+                miso = miso + self.miso.value.binstr
+                mosi = mosi + self.mosi.value.binstr
+            values_recv = {"miso": miso, "mosi": mosi}
+            self.log.warning("value sent/recv")
+            self._recv(values_recv)

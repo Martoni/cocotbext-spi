@@ -11,17 +11,17 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="cocotb-ext-spi",
+    name="cocomod-spi",
     use_scm_version={
         "relative_to": __file__,
-        "write_to": "cocotb/ext/spi/version.py",
+        "write_to": "cocomod/spi/version.py",
     },
     author="Fabien Marteau",
     author_email="mail@fabienm.eu",
     description="Cocotb SPI module",
     long_description=long_description,
-    url="https://github.com/Martoni/cocotb_ext_spi.git",
-    packages=["cocotb.ext.spi"],
+    url="https://github.com/Martoni/cocomod-spi.git",
+    packages=["cocomod.spi"],
     install_requires=['cocotb'],
     setup_requires=[
         'setuptools_scm',

@@ -90,7 +90,7 @@ class SPIModule(Driver, Monitor):
     def sig_init(self):
         self.mosi <= 0
         self.sclk <= 0
-        self.cs <= self.config.csphase
+        self.cs <= int(not self.config.csphase)
 
     def set_cs(self, enable):
         if enable:
@@ -126,8 +126,6 @@ class SPIModule(Driver, Monitor):
 
     @coroutine
     def _monitor_recv(self):
-        self.log.warning("TODO: implement spi monitor function _monitor_recv")
-
         while True:
             miso = ""
             mosi = ""
@@ -137,5 +135,4 @@ class SPIModule(Driver, Monitor):
                 miso = miso + self.miso.value.binstr
                 mosi = mosi + self.mosi.value.binstr
             values_recv = {"miso": miso, "mosi": mosi}
-            self.log.warning("value sent/recv")
             self._recv(values_recv)

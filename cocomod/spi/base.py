@@ -131,8 +131,9 @@ class SPIModule(Driver, Monitor):
             mosi = ""
             yield self.csBeginEdge
             while int(self.cs) == int(self.config.csphase):
-                yield [self.dataReadEdge, self.csEndEdge]
-                miso = miso + self.miso.value.binstr
-                mosi = mosi + self.mosi.value.binstr
+                trig = yield [self.dataReadEdge, self.csEndEdge]
+                if trig == self.dataReadEdge:
+                    miso = miso + self.miso.value.binstr
+                    mosi = mosi + self.mosi.value.binstr
             values_recv = {"miso": miso, "mosi": mosi}
             self._recv(values_recv)

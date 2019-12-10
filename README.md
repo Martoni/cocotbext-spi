@@ -1,4 +1,4 @@
-# cocomod-spi
+# cocotbext-spi
 Protocol test extension for testing spi in cocotb
 
 
@@ -8,15 +8,15 @@ To use this module the easyiest way is to
 
 * clone the repository :
 ```shell
-$ git clone https://github.com/Martoni/cocomod-spi.git
+$ git clone https://github.com/Martoni/cocotbext-spi.git
 ```
 
 * Then install it with pip (tested with python 3.7):
 ```shell
-$ python -m pip install -e cocomod-spi/
+$ python -m pip install -e cocotbext-spi/
 ```
 
-With this method if cocomod-spi code is modified, modification will be taken
+With this method if cocotbext-spi code is modified, modification will be taken
 into account in your testbench directly. Without having to re-install module.
 
 # How to use it
@@ -24,15 +24,15 @@ into account in your testbench directly. Without having to re-install module.
 Simply include the module in your testbench :
 
 ```python
-from cocomod.spi import *
+from cocotbext.spi import *
 ```
 
-cocomod-spi module include Master side test. The module SPIModule() is seen as a
+cocotbext-spi module include Master side test. The module SPIModule() is seen as a
 SPI master and dut SPI interface as a slave.
 
 ## Master
 
-cocomod-spi is composed of two classes :
+cocotbext-spi is composed of two classes :
 * `SPIConfig()`: to describe configuration
 * `SPIModule()`: the test module inherit from Driver and Monitor.
 

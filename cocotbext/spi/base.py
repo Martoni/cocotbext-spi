@@ -42,7 +42,7 @@ class SPIModule(Driver, Monitor):
     """ test class for SPI """
 
     def __init__(self, config, signals, clk, *, clk_freq=None):
-        self.log = SimLog("cocomod.spi.{}".format(self.__class__.__name__))
+        self.log = SimLog("cocotbext.spi.{}".format(self.__class__.__name__))
         self.log.setLevel(config.loglevel)
         self.config = config
         self.clk = clk

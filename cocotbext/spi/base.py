@@ -32,14 +32,14 @@ class SPIConfig(object):
     def __setattr__(self, key, value):
         if key == "cpol":
             if value != False:
-                raise TypeError("cpol = True fully implemented yet")
+                raise NotImplementedError("cpol=True not fully implemented yet")
         elif key == "cpha":
             if value != True:
-                raise TypeError("cpha = False fully implemented yet")
+                raise NotImplementedError("cpha=False not fully implemented yet")
         self.__dict__[key] = value
 
 class SPIModule(Driver, Monitor):
-    """ test class for SPI """
+    """ Test class for SPI """
 
     def __init__(self, config, signals, clk, *, clk_freq=None):
         self.log = SimLog("cocotbext.spi.{}".format(self.__class__.__name__))
@@ -101,12 +101,12 @@ class SPIModule(Driver, Monitor):
     @coroutine
     def read(self, address, sync=True):
         """ Reading value on SPI """
-        raise Exception("TODO: read a value on SPI with read()")
+        raise NotImplementedError("TODO: read a value on SPI with read()")
 
     @coroutine
     def write(self, address, values_list):
         """ Writing value on SPI"""
-        raise Exception("TODO: write values on SPI with write()")
+        raise NotImplementedError("TODO: write values on SPI with write()")
 
     @coroutine
     def _driver_send(self, transaction, sync=True, **kwargs):

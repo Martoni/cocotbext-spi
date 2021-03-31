@@ -8,7 +8,7 @@
 from collections import namedtuple
 import logging
 
-from cocotb import SimLog, coroutine
+from cocotb import coroutine
 from cocotb.drivers import Driver
 from cocotb.monitors import Monitor
 from cocotb.result import TestError
@@ -42,7 +42,7 @@ class SPIModule(Driver, Monitor):
     """ Test class for SPI """
 
     def __init__(self, config, signals, clk, *, clk_freq=None):
-        self.log = SimLog("cocotbext.spi.{}".format(self.__class__.__name__))
+        self.log = logging.getLogger("cocotbext.spi.{}".format(self.__class__.__name__))
         self.log.setLevel(config.loglevel)
         self.config = config
         self.clk = clk

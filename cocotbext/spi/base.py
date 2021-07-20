@@ -119,7 +119,10 @@ class SPIModule(Driver, Monitor):
 
         for i in range(8):
             self.sclk <= 1
-            self.mosi <= (transaction >> (7-i)) & 0x01
+            if kwargs.get('LSBFirst') == 1:
+                self.mosi <= (transaction >> (i)) & 0x01
+            else:
+                self.mosi <= (transaction >> (7-i)) & 0x01
             yield sclk_per
             self.sclk <= 0
             yield sclk_per

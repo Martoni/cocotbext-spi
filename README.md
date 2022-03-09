@@ -1,3 +1,13 @@
+
+# /!\\ OBSOLETE /!\\
+There is a cocotbext-spi concurent in pypi repository: https://pypi.org/project/cocotbext-spi/
+How that's possible to have two project with same name in github ?
+
+https://github.com/schang412/cocotbext-spi
+
+schang412 seems to be more up-to-date module. I think mine will be deleted in futur. If you need spi simulation un cocotb, it's certainly safer to use schang412 module.
+
+
 # cocotbext-spi
 Protocol test extension for testing spi in cocotb
 
